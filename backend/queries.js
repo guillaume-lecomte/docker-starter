@@ -11,19 +11,12 @@ const pool = new Pool({
 });
 
 const getAllProducts = (req, res) => {
-  pool.connect((err, client, release) => {
-    if (err) {
-      console.log(err.stack);
-      res.status(500).json(e);
+  pool.query("SELECT * FROM products ORDER BY id ASC", (error, result) => {
+    if (error) {
+      console.log(error.stack);
+      return res.status(500).json({ message: "Database error" });
     }
-    client.query("SELECT * FROM products ORDER BY id ASC", (e, result) => {
-      release();
-      if (e) {
-        console.log(e.stack);
-        res.status(500).json(e);
-      }
-      res.status(200).json(result.rows);
-    });
+    res.status(200).json(result.rows);
   });
 };
 
