@@ -32,7 +32,7 @@ yarn install
 yarn start
 ```
 
-Verified on 2026-10-06 with Node.js 22 and a locally installed PostgreSQL 16 instead of Docker: `npm ci` in `backend/`, then the API started with the `.env.example` values answers `/health` and `/products` (the one product from `init.sql`), and answers `500` with a JSON message when the database cannot be reached. Not run: `docker-compose up`, and everything in `frontend/`.
+Verified on 2026-10-06 with Node.js 22 and a locally installed PostgreSQL 16 instead of Docker: `npm ci` in `backend/`, then the API started with the variables of `backend/.env.example` pointed at `localhost` answers `/health` and `/products` (the one product from `init.sql`), and answers `500` with a JSON message when the database cannot be reached. Not run: `docker-compose up`, and everything in `frontend/`.
 
 ## Known issues
 
