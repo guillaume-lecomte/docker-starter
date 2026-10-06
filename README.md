@@ -17,8 +17,12 @@ From [`docker-compose.yml`](docker-compose.yml) and the `package.json` files: th
 ## Run it
 
 ```bash
+cp backend/.env.example backend/.env
+cp database/.env.example database/.env
 docker-compose up
 ```
+
+The two `.env` files hold development values (`secret` as the database and pgAdmin password, `admin@mail.com` as the pgAdmin login). Change them if the ports are exposed beyond your machine.
 
 Then, in another terminal, the front end:
 
@@ -28,13 +32,12 @@ yarn install
 yarn start
 ```
 
-These commands were not run when this README was written.
+Verified on 2026-10-06 with Node.js 22 and a locally installed PostgreSQL 16 instead of Docker: `npm ci` in `backend/`, then the API started with the `.env.example` values answers `/health` and `/products` (the one product from `init.sql`), and answers `500` with a JSON message when the database cannot be reached. Not run: `docker-compose up`, and everything in `frontend/`.
 
 ## Known issues
 
-- The environment files [`backend/.env`](backend/.env) and [`database/.env`](database/.env) are committed. They hold development values (`secret` as the database and pgAdmin password, `admin@mail.com` as the pgAdmin login), and Compose needs them.
-- In [`backend/queries.js`](backend/queries.js), the error branch of the connection callback uses a variable `e` that does not exist there (the callback names it `err`), so a failed connection raises a `ReferenceError`. The error branches also do not return, so they go on to send a second response.
 - The images are not pinned to a version.
+- `backend/` has both a `package-lock.json` and a `yarn.lock`. The Dockerfile uses `npm ci`, so the npm one is the one that counts.
 - The front end calls `http://localhost:3001` directly, so it only works from the machine that runs the API.
 - The dependencies of the front end are from 2020 and `yarn audit` reports a large number of advisories for them. Do not deploy this as is.
 - The only test is the default Create React App one.
